@@ -1,18 +1,14 @@
 "use client"
 
-import type { UnsphotoApiUserType, UnsphotoApiLinksType, UnsphotoApiUrlsType } from "@/@types/typings"
+import type { UnsphotoApiCompleteType } from "@/@types/typings"
 import React, { createContext, useState, useContext, ReactNode } from "react"
 
 type LightboxContextType = {
   isLightboxOpen: boolean;
-  lightBoxUserData: UnsphotoApiUserType;
-  lightBoxLinksData: UnsphotoApiLinksType;
-  lightBoxUrlsData: UnsphotoApiUrlsType;
   openLightbox: () => void;
   closeLightbox: () => void;
-  setLightBoxUserData: (userData: UnsphotoApiUserType) => void;
-  setLightBoxLinksData: (linksData: UnsphotoApiLinksType) => void;
-  setLightBoxUrlsData: (urlsData: UnsphotoApiUrlsType) => void;
+  lightboxData: UnsphotoApiCompleteType[];
+  setLightboxData: (data: UnsphotoApiCompleteType[]) => void;
 }
 
 const LightboxContext = createContext<LightboxContextType | undefined>(undefined)
@@ -23,9 +19,7 @@ type LightboxContextProviderProps = {
 
 export const LightboxProvider: React.FC<LightboxContextProviderProps> = ({ children }) => {
   const [isLightboxOpen, setIsLightboxOpen] = useState<boolean>(false)
-  const [lightBoxUserData, setLightBoxUserData] = useState({})
-  const [lightBoxLinksData, setLightBoxLinksData] = useState({})
-  const [lightBoxUrlsData, setLightBoxUrlsData] = useState({})
+  const [lightboxData, setLightboxData] = useState<UnsphotoApiCompleteType[]>([])
 
   const openLightbox = () => {
     setIsLightboxOpen(true)
@@ -41,12 +35,8 @@ export const LightboxProvider: React.FC<LightboxContextProviderProps> = ({ child
         isLightboxOpen,
         openLightbox,
         closeLightbox,
-        setLightBoxUserData,
-        setLightBoxLinksData,
-        setLightBoxUrlsData,
-        lightBoxUserData,
-        lightBoxLinksData,
-        lightBoxUrlsData,
+        lightboxData,
+        setLightboxData,
       }}
     >
       {children}

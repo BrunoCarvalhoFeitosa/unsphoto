@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useEffect, useState } from "react"
+import { UnsphotoApiCompleteType } from "@/@types/typings"
 import Link from "next/link"
 import Moment from "react-moment"
 import { saveAs } from "file-saver"
@@ -24,8 +25,7 @@ const Lightbox = () => {
     const {
         isLightboxOpen,
         closeLightbox,
-        lightBoxUserData,
-        lightBoxUrlsData
+        lightboxData,
     } = useLightbox()
 
     useEffect(() => {
@@ -40,7 +40,7 @@ const Lightbox = () => {
 
     return (
         <div>
-            {isLightboxOpen && (
+            {isLightboxOpen  && lightboxData[0] && (
                 <div className="fixed top-0 left-0 w-full h-[100vh] overflow-hidden bg-black/80 z-50">
                     <div className="w-[94%] md:w-[70%] h-[90vh] absolute top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%] overflow-y-auto bg-white">
                         <div className="sticky -top-[2px] w-full flex justify-end py-3 pr-3 bg-white z-20">
@@ -55,21 +55,21 @@ const Lightbox = () => {
                             <div className="flex items-center gap-x-2">
                                 <div className="cursor-pointer">
                                     <img
-                                        src={lightBoxUserData?.profile_image?.medium ?? lightBoxUserData.profile_image.large ?? lightBoxUserData?.profile_image?.small}
-                                        alt={lightBoxUserData?.name}
+                                        src={lightboxData[0]?.user?.profile_image.medium ?? lightboxData[0]?.user?.profile_image?.large ?? lightboxData[0]?.user?.profile_image?.small}
+                                        alt={lightboxData[0]?.user?.name}
                                         className="w-[55px] h-[55px] rounded-full object-cover"
                                     />
                                 </div>
                                 <div>
                                     <div className="leading-[16px]">
                                         <h3 className="text-md ml-1">
-                                            {lightBoxUserData?.name}
+                                            {lightboxData[0]?.user?.name}
                                         </h3>
                                     </div>
                                     <div className="">
-                                        {lightBoxUserData?.instagram_username && (
+                                        {lightboxData[0]?.user?.instagram_username && (
                                             <Link
-                                                href={`https://www.instagram.com/${lightBoxUserData?.instagram_username}`}
+                                                href={`https://www.instagram.com/${lightboxData[0]?.user?.instagram_username}`}
                                                 target="_blank"
                                                 rel="noreferrer"
                                                 className="outline-none"
@@ -79,7 +79,7 @@ const Lightbox = () => {
                                                         className="text-xl"
                                                     />
                                                     <h4 className="text-sm font-semibold">
-                                                        @{lightBoxUserData?.instagram_username}
+                                                        @{lightboxData[0]?.user?.instagram_username}
                                                     </h4>
                                                 </div>
                                             </Link>
@@ -105,7 +105,7 @@ const Lightbox = () => {
                                         <AiOutlineLike className="text-lg cursor-pointer" />
                                     </button>
                                     <div className="text-sm">
-                                        {lightBoxUserData?.likes}
+                                        {lightboxData[0]?.likes}
                                     </div>
                                 </div>
                                 <button
@@ -125,7 +125,7 @@ const Lightbox = () => {
                                                     onClick={() => {
                                                         setCount(count + 1)
                                                         saveAs(
-                                                            lightBoxUrlsData?.small,
+                                                            lightboxData[0]?.urls?.small,
                                                             `download-${count}`
                                                         )
                                                     }}
@@ -141,7 +141,7 @@ const Lightbox = () => {
                                                     onClick={() => {
                                                         setCount(count + 1)
                                                         saveAs(
-                                                            lightBoxUrlsData?.regular,
+                                                            lightboxData[0]?.urls?.regular,
                                                             `download-${count}`
                                                         )
                                                     }}
@@ -157,7 +157,7 @@ const Lightbox = () => {
                                                     onClick={() => {
                                                         setCount(count + 1)
                                                         saveAs(
-                                                            lightBoxUrlsData?.full,
+                                                            lightboxData[0]?.urls?.full,
                                                             `download-${count}`
                                                         )
                                                     }}
@@ -175,8 +175,8 @@ const Lightbox = () => {
                         </div>
                         <div className="w-full md:w-[80%] mx-auto my-6 overflow-hidden">
                             <img
-                                src={lightBoxUrlsData?.full}
-                                alt={lightBoxUserData.alt}
+                                src={lightboxData[0]?.urls?.full ?? lightboxData[0]?.urls?.raw ?? lightboxData[0]?.urls?.regular}
+                                alt={lightboxData[0]?.alt}
                                 className="hover:scale-150 transition-transform cursor-zoom-in"
                             />
                         </div>
@@ -187,7 +187,7 @@ const Lightbox = () => {
                                         Visualizações
                                     </h4>
                                     <p>
-                                        {lightBoxUserData?.views ?? "0"}
+                                        {lightboxData[0]?.views ?? "0"}
                                     </p>
                                 </div>
                                 <div>
@@ -195,7 +195,7 @@ const Lightbox = () => {
                                         Downloads
                                     </h4>
                                     <p>
-                                        {lightBoxUserData?.downloads ?? "0"}
+                                        {lightboxData[0]?.downloads ?? "0"}
                                     </p>
                                 </div>
                                 <div>
@@ -203,20 +203,20 @@ const Lightbox = () => {
                                         Data de publicação
                                     </h4>
                                     <Moment format="DD/MM/YYYY">
-                                        {lightBoxUserData.created_at ?? lightBoxUserData.update_at}
+                                        {lightboxData[0]?.created_at ?? lightboxData[0]?.updated_at}
                                     </Moment>
                                 </div>
                             </div>
                             <div className="py-6">
                                 <div className="flex items-center gap-x-2 mb-1">
                                     <GrMapLocation className="text-lg" />
-                                    {lightBoxUserData?.location ? (
+                                    {lightboxData[0]?.user?.location ? (
                                         <Link
-                                            href={`https://www.google.com/maps/place/${lightBoxUserData?.location}`}
+                                            href={`https://www.google.com/maps/place/${lightboxData[0]?.user?.location}`}
                                             target="_blank"
                                             className="text-sm capitalize outline-none"
                                         >
-                                            {lightBoxUserData?.location}
+                                            {lightboxData[0]?.user?.location}
                                         </Link>
                                     ): (
                                         <p className="text-sm">
@@ -224,37 +224,37 @@ const Lightbox = () => {
                                         </p>
                                     )}
                                 </div>
-                                {lightBoxUserData?.instagram_username && (
+                                {lightboxData[0]?.user?.instagram_username && (
                                     <div className="flex items-center gap-x-2 mb-1">
                                         <AiOutlineInstagram className="text-xl" />
                                         <Link
-                                            href={`https://www.instagram.com/${lightBoxUserData.instagram_username}`}
+                                            href={`https://www.instagram.com/${lightboxData[0]?.user?.instagram_username}`}
                                             target="_blank"
                                             rel="noreferrer"
                                             className="text-sm outline-none"
                                         >
-                                            @{lightBoxUserData?.instagram_username}
+                                            @{lightboxData[0]?.user?.instagram_username}
                                         </Link>
                                     </div>
                                 )}
-                                {lightBoxUserData?.twitter_username && (
+                                {lightboxData[0]?.user?.twitter_username && (
                                     <div className="flex items-center gap-x-2 mb-1">
                                         <AiOutlineTwitter className="text-xl" />
                                         <Link
-                                            href={`https://www.twitter.com/${lightBoxUserData?.twitter_username}`}
+                                            href={`https://www.twitter.com/${lightboxData[0]?.user?.twitter_username}`}
                                             target="_blank"
                                             rel="noreferrer"
                                             className="text-sm outline-none"
                                         >
-                                            @{lightBoxUserData?.twitter_username}
+                                            @{lightboxData[0]?.user?.twitter_username}
                                         </Link>
                                     </div>
                                 )}
                                 <div className="flex items-center gap-x-2 mb-1">
                                     <BiCamera className="text-xl" />
-                                    {lightBoxUserData?.exif?.name ? (
+                                    {lightboxData[0]?.exif?.name ? (
                                         <p className="text-sm">
-                                            {lightBoxUserData?.exif?.name}
+                                            {lightboxData[0]?.exif?.name}
                                         </p>
                                     ) : (
                                         <p className="text-sm">

@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useEffect, useState } from "react"
+import { UnsphotoApiCompleteType } from "@/@types/typings"
 import axios from "axios"
 import { useSearch } from "@/contexts/SearchContext"
 import useVerifyScrollBottom from "@/hooks/useVerifyScrollBottom"
@@ -34,13 +35,13 @@ const Gallery = () => {
 
   useEffect(() => {
     loadMoreImages()
-  }, [loadMoreImages])
+  }, [])
 
-  useEffect(() => {
-    if (reachedBottom) {
-      loadMoreImages()
-    }
-  }, [reachedBottom, loadMoreImages])
+  // useEffect(() => {
+  //   if (reachedBottom) {
+  //     loadMoreImages()
+  //   }
+  // }, [reachedBottom])
 
   return (
     <div className="w-full bg-white" id="gallerySection">
@@ -51,40 +52,17 @@ const Gallery = () => {
           <div>
             {isSearched && searchedResults ? (
               <div className="columns-2 md:columns-3 lg:columns-3 gap-1">
-                {searchedResults.map((image, index) => (
+                {searchedResults.map((image: UnsphotoApiCompleteType, index: number) => (
                   <div key={index}>
-                    <GalleryImage
-                      user={image.user}
-                      links={image.links}
-                      urls={image.urls}
-                      likes={image.likes}
-                      downloads={image.downloads}
-                      views={image.views}
-                      exif={image.exif}
-                      created_at={image.created_at}
-                      updated_at={image.updated_at}
-                      alt={image.alt_description}
-                      key={index}
-                    />
+                    <GalleryImage data={image} />
                   </div>
                 ))}
               </div>
             ) : (
               <div className="columns-2 md:columns-3 lg:columns-3 gap-1">
-                {images.map((image, index) => (
+                {images.map((image: UnsphotoApiCompleteType, index: number) => (
                   <div key={index}>
-                    <GalleryImage
-                      user={image.user}
-                      links={image.links}
-                      urls={image.urls}
-                      likes={image.likes}
-                      downloads={image.downloads}
-                      views={image.views}
-                      exif={image.exif}
-                      created_at={image.created_at}
-                      updated_at={image.updated_at}
-                      alt={image.alt_description}
-                    />
+                    <GalleryImage data={image} />
                   </div>
                 ))}
               </div>

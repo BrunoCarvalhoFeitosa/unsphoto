@@ -1,42 +1,30 @@
-import type { UnsphotoApiCompleteType } from "@/@types/typings"
-import React, { useState } from "react"
-import Link from "next/link"
-import { saveAs } from "file-saver"
-import { LazyLoadImage } from "react-lazy-load-image-component"
-import { AiOutlineDownload, AiOutlineInstagram, AiOutlineTwitter, AiOutlinePicture } from "react-icons/ai"
-import { useLightbox } from "@/contexts/LightboxContext"
+import React, { useState } from "react";
+import Link from "next/link";
+import { saveAs } from "file-saver";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import { AiOutlineDownload, AiOutlineInstagram, AiOutlineTwitter, AiOutlinePicture } from "react-icons/ai";
+import { useLightbox } from "@/contexts/LightboxContext";
+import { UnsphotoApiCompleteType } from "@/@types/typings";
 
-const GalleryImage: React.FC<UnsphotoApiCompleteType> = ({
-    user,
-    links,
-    urls,
-    created_at,
-    updated_at,
-    likes,
-    downloads,
-    views,
-    exif,
-    alt
-}) => {
-    const [showImageCredits, setShowImageCredits] = useState<boolean>(false)
-    const [count, setCount] = useState<number>(0)
+const GalleryImage: React.FC<{ data: UnsphotoApiCompleteType }> = ({ data }) => {
+    const [showImageCredits, setShowImageCredits] = useState<boolean>(false);
+    const [count, setCount] = useState<number>(0);
+
     const {
         openLightbox,
-        setLightBoxUserData,
-        setLightBoxLinksData,
-        setLightBoxUrlsData
-    } = useLightbox()
+        setLightboxData,
+    } = useLightbox();
 
     const handleShowCredits = () => {
-        setShowImageCredits(!showImageCredits)
+        setShowImageCredits(!showImageCredits);
     }
 
     return (
         <div className="w-full flex relative bg-gray-300">
             <div className="flex" onMouseOver={handleShowCredits}>
                 <LazyLoadImage
-                    src={urls.full}
-                    alt={alt}
+                    src={data.urls.full}
+                    alt={data.alt ?? data.alt_description}
                     className="w-full h-full object-cover"
                     effect="blur"
                 />
@@ -47,36 +35,25 @@ const GalleryImage: React.FC<UnsphotoApiCompleteType> = ({
                     onMouseLeave={handleShowCredits}
                     onClick={() => {
                         openLightbox()
-                        setLightBoxUserData({
-                            ...user,
-                            created_at,
-                            updated_at,
-                            likes,
-                            downloads,
-                            views,
-                            exif,
-                            alt
-                        })
-                        setLightBoxLinksData(links)
-                        setLightBoxUrlsData(urls)
+                        setLightboxData([data])
                     }}
                 >
                     <div className="flex items-end space-between h-full">
                         <div className="flex flex-col md:flex-row flex-1 md:items-center gap-x-3">
                             <div className="relative">
                                 <img
-                                    src={user.profile_image.medium}
-                                    alt={`${user.first_name} ${user.last_name}`}
+                                    src={data.user.profile_image.medium}
+                                    alt={`${data.user.first_name} ${data.user.last_name}`}
                                     className="rounded-full w-12 h-12"
                                 />
                             </div>
                             <div className="text-sm text-white">
                                 <p className="leading-none w-[100px] md:w-[130px] truncate ...">
-                                    {user.name}
+                                    {data.user.name}
                                 </p>
-                                {user.instagram_username ? (
+                                {data.user.instagram_username ? (
                                     <Link
-                                        href={`https://www.instagram.com/${user.instagram_username}`}
+                                        href={`https://www.instagram.com/${data.user.instagram_username}`}
                                         target="_blank"
                                         rel="noreferrer"
                                         className="flex items-center gap-x-1 outline-none"
@@ -87,14 +64,14 @@ const GalleryImage: React.FC<UnsphotoApiCompleteType> = ({
                                             />
                                         </div>
                                         <div className="w-[100px] md:w-[130px] truncate ...">
-                                            @{user.instagram_username}
+                                            @{data.user.instagram_username}
                                         </div>
                                     </Link>
                                 ) : (
                                     <div>
-                                        {user.twitter_username ? (
+                                        {data.user.twitter_username ? (
                                             <Link
-                                                href={user.twitter_username}
+                                                href={data.user.twitter_username}
                                                 target="_blank"
                                                 rel="noreferrer"
                                                 className="flex items-center gap-x-1 outline-none"
@@ -105,12 +82,12 @@ const GalleryImage: React.FC<UnsphotoApiCompleteType> = ({
                                                     />
                                                 </div>
                                                 <div className="md:w-[130px] truncate ...">
-                                                    @{user.twitter_username}
+                                                    @{data.user.twitter_username}
                                                 </div>
                                             </Link>
                                         ) : (
                                             <Link
-                                                href={user.portfolio_url ?? "/"}
+                                                href={data.user.portfolio_url ?? "/"}
                                                 target="_blank"
                                                 rel="noreferrer"
                                                 className="flex items-center gap-x-1 outline-none"
@@ -135,7 +112,7 @@ const GalleryImage: React.FC<UnsphotoApiCompleteType> = ({
                                 onClick={() => {
                                     setCount(count + 1)
                                     saveAs(
-                                        urls.full,
+                                        data.urls.full,
                                         `download-${count}`
                                     )
                                 }}
@@ -147,7 +124,7 @@ const GalleryImage: React.FC<UnsphotoApiCompleteType> = ({
                 </div>
             )}
         </div>
-    )
+    );
 }
 
-export default GalleryImage
+export default GalleryImage;
