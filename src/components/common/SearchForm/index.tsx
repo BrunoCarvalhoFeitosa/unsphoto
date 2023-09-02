@@ -1,6 +1,6 @@
 "use client"
 
-import React, { FormEvent } from "react"
+import React from "react"
 import * as yup from "yup"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { useForm } from "react-hook-form"
@@ -45,7 +45,7 @@ const SearchForm: React.FC<Props> = ({ type }) => {
         )
     }
 
-    const onSubmit = async (data: DataType, event: FormEvent) => {
+    const onSubmit = async (data: DataType, event: any) => {
         event.preventDefault()
         
         try {

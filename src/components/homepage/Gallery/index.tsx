@@ -34,13 +34,13 @@ const Gallery = () => {
 
   useEffect(() => {
     loadMoreImages()
-  }, [])
+  }, [loadMoreImages])
 
   useEffect(() => {
     if (reachedBottom) {
       loadMoreImages()
     }
-  }, [reachedBottom])
+  }, [reachedBottom, loadMoreImages])
 
   return (
     <div className="w-full bg-white" id="gallerySection">
