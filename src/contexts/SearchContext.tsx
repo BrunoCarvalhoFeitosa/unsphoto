@@ -11,10 +11,10 @@ import React, {
 type SearchDataType = {
     searchTerm: string;
     isSearched: boolean;
-    searchedResults: UnsphotoApiCompleteType;
+    searchedResults: any;
     setSearchTerm: (term: string) => void
     setIsSearched: (search: boolean) => void
-    setSearchedResults: (result: UnsphotoApiCompleteType) => void
+    setSearchedResults: (result: any) => void
 }
 
 const SearchContext = createContext<SearchDataType | undefined>(undefined)
@@ -26,7 +26,7 @@ type SearchContextProviderProps = {
 export const SearchProvider: React.FC<SearchContextProviderProps> = ({ children }) => {
     const [searchTerm, setSearchTerm] = useState<string>("")
     const [isSearched, setIsSearched] = useState<boolean>(false)
-    const [searchedResults, setSearchedResults] = useState({})
+    const [searchedResults, setSearchedResults] = useState<any>([])
 
     return (
         <SearchContext.Provider
