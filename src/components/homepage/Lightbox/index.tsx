@@ -1,7 +1,6 @@
 "use client"
 
 import React, { useEffect, useState } from "react"
-import { UnsphotoApiCompleteType } from "@/@types/typings"
 import Link from "next/link"
 import Moment from "react-moment"
 import { saveAs } from "file-saver"

@@ -11,6 +11,7 @@ import { LogoSvg } from "@/assets/svg/logo"
 import SearchForm from "@/components/common/SearchForm"
 import MenuDropdown from "./MenuDropdown"
 import UserDropdown from "./UserDropdown"
+import { highlightPicturesMenu } from "@/data/highlightPicturesMenu"
 import "keen-slider/keen-slider.min.css"
 
 const Header = () => {
@@ -54,27 +55,6 @@ const Header = () => {
     })
 
     const { setIsSearched, setSearchedResults } = useSearch()
-
-    const highlightPictures = [
-        { name: "No Lago" },
-        { name: "Wallpapers" },
-        { name: "Natureza" },
-        { name: "Texturas" },
-        { name: "Arquitetura" },
-        { name: "Filme" },
-        { name: "Urbanismo" },
-        { name: "Experimental" },
-        { name: "Animais" },
-        { name: "Moda" },
-        { name: "Negócios" },
-        { name: "Comida" },
-        { name: "Viajar" },
-        { name: "Povo" },
-        { name: "Espiritualidade" },
-        { name: "Atletismo" },
-        { name: "Bem Estar" },
-        { name: "Cultura" },
-    ]
 
     const Arrow = (props: any) => {
         const disabeld = props.disabled ? " arrow--disabled" : ""
@@ -178,7 +158,7 @@ const Header = () => {
                     )}
                     <div className="navigation-wrapper relative">
                         <ul ref={sliderRef} className="keen-slider list-none">
-                            {highlightPictures.map((item, index) => (
+                            {highlightPicturesMenu.map((item, index) => (
                                 <li
                                     key={index}
                                     className="keen-slider__slide text-[13px] md:text-[15px] text-center text-gray-500 hover:text-black cursor-pointer"    
